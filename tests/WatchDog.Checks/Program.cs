@@ -81,9 +81,16 @@ internal static class Program
         bitmap.Save(path);
         var shell = form.Controls.OfType<TableLayoutPanel>().Single();
         var tabs = shell.Controls.OfType<TabControl>().Single();
-        Check(tabs.TabPages.Count == 1, "Manual MQTT page is hidden");
+        Check(tabs.TabPages.Count == 2 && tabs.TabPages.Cast<TabPage>().All(page => page.Text != "東元 MQTT / 手動發布"),
+            "CDB and Parser pages are visible; manual MQTT page remains hidden");
+        tabs.SelectedIndex = 1;
+        Application.DoEvents();
+        using var parserBitmap = new Bitmap(form.Width, form.Height);
+        form.DrawToBitmap(parserBitmap, form.ClientRectangle);
+        var parserPreviewPath = Path.GetFullPath("output/watchdog-parser-preview.png");
+        parserBitmap.Save(parserPreviewPath);
         form.Close();
         Check(true, "Form construction and offscreen render (no network)");
-        Console.WriteLine($"{checks} checks passed. Preview: {path}");
+        Console.WriteLine($"{checks} checks passed. Previews: {path}; {parserPreviewPath}");
     }
 }

@@ -2,6 +2,20 @@
 
 本專案版本紀錄遵循 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [Unreleased]
+
+## [1.1.0] - 2026-10-08
+
+### 新增
+
+- Parser 監控分頁：檢查指定 `.venv` Python 程序、顯示 PID／啟動時間、Parser Log 更新時間，並讀取 `logs/bridge.log` 最後 200 行。
+- Parser 監控檢查間隔可設定，程序狀態變更同步寫入 WatchDog 每日事件紀錄。
+- Parser 可在程序連續遺失或 Log 出現嚴重執行錯誤時，自動執行既有 `start_parser.bat` 重啟；支援手動重啟、冷卻時間及每日次數上限。
+- Parser Log 分類：網路／資料庫重連及資料／SQL 錯誤僅記錄，不做無效重啟；`CRITICAL`、Traceback、Fatal Python error 或未處理例外才觸發重啟判斷。
+- Parser Log 遇到檔案輪替、占用或短暫讀取失敗時不終止監控，下一輪自動重試。
+- Parser 資料夾路徑會保存至執行檔旁的 `parser-settings.json`，下次啟動自動載入。
+- Parser 的連續異常次數可在介面設定並保存；冷卻時間 60 秒與每日最多重啟 5 次維持內部安全預設。
+
 ## [1.0.0] - 2026-10-08
 
 ### 新增

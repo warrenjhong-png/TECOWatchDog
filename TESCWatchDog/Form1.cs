@@ -20,6 +20,7 @@ public partial class Form1 : Form
         InitializeComponent();
         InitializeDailyLog();
         InitializeDatabaseSettings();
+        InitializeParserSettings();
 
         mqttClient = new MqttFactory().CreateMqttClient();
         mqttClient.ApplicationMessageReceivedAsync += OnMessageReceivedAsync;
@@ -276,7 +277,9 @@ public partial class Form1 : Form
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
         // 先取消非同步工作，再釋放 MQTT；晚到的 UI 回呼由 PostUi 忽略。
+        SaveParserSettings();
         monitorCancellation?.Cancel();
+        parserMonitorCancellation?.Cancel();
         receiptLifetime.Cancel();
         DisconnectReceipts();
         lock (dailyLogLock)

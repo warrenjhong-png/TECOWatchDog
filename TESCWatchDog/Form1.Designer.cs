@@ -6,6 +6,22 @@ partial class Form1
     private TableLayoutPanel shell;
     private TabControl tabs;
     private TabPage dbPage;
+    private TabPage parserPage;
+    private Label parserPathLabel;
+    private TextBox parserPathTextBox;
+    private Button startParserMonitorButton;
+    private Button stopParserMonitorButton;
+    private Label parserStatusLabel;
+    private Label parserIntervalLabel;
+    private NumericUpDown parserIntervalNumeric;
+    private Label parserProcessLabel;
+    private CheckBox parserAutoRestartCheckBox;
+    private Label parserFailureCountLabel;
+    private NumericUpDown parserFailureCountNumeric;
+    private Button restartParserButton;
+    private Label parserLogPathLabel;
+    private TextBox parserLogPathTextBox;
+    private TextBox parserLogTextBox;
     private Panel toolbar;
     private Button startMonitor;
     private Button stopMonitor;
@@ -72,6 +88,22 @@ partial class Form1
         shell = new TableLayoutPanel();
         tabs = new TabControl();
         dbPage = new TabPage();
+        parserPage = new TabPage();
+        parserPathLabel = new Label();
+        parserPathTextBox = new TextBox();
+        startParserMonitorButton = new Button();
+        stopParserMonitorButton = new Button();
+        parserStatusLabel = new Label();
+        parserIntervalLabel = new Label();
+        parserIntervalNumeric = new NumericUpDown();
+        parserProcessLabel = new Label();
+        parserAutoRestartCheckBox = new CheckBox();
+        parserFailureCountLabel = new Label();
+        parserFailureCountNumeric = new NumericUpDown();
+        restartParserButton = new Button();
+        parserLogPathLabel = new Label();
+        parserLogPathTextBox = new TextBox();
+        parserLogTextBox = new TextBox();
         toolbar = new Panel();
         startMonitor = new Button();
         stopMonitor = new Button();
@@ -130,11 +162,14 @@ partial class Form1
         shell.SuspendLayout();
         tabs.SuspendLayout();
         dbPage.SuspendLayout();
+        parserPage.SuspendLayout();
         toolbar.SuspendLayout();
         monitorSettings.SuspendLayout();
         cdbGroup.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)pollSeconds).BeginInit();
         ((System.ComponentModel.ISupportInitialize)timeoutSecondsNumeric).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)parserIntervalNumeric).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)parserFailureCountNumeric).BeginInit();
         notificationGroup.SuspendLayout();
         manualPanel.SuspendLayout();
         SuspendLayout();
@@ -157,6 +192,7 @@ partial class Form1
         // tabs
         // 
         tabs.Controls.Add(dbPage);
+        tabs.Controls.Add(parserPage);
         tabs.Dock = DockStyle.Fill;
         tabs.Location = new Point(3, 3);
         tabs.Name = "tabs";
@@ -174,6 +210,166 @@ partial class Form1
         dbPage.Size = new Size(1086, 525);
         dbPage.TabIndex = 0;
         dbPage.Text = "CDB 監控／通知";
+        // 
+        // parserPage
+        // 
+        parserPage.Controls.Add(parserPathLabel);
+        parserPage.Controls.Add(parserPathTextBox);
+        parserPage.Controls.Add(startParserMonitorButton);
+        parserPage.Controls.Add(stopParserMonitorButton);
+        parserPage.Controls.Add(parserStatusLabel);
+        parserPage.Controls.Add(parserIntervalLabel);
+        parserPage.Controls.Add(parserIntervalNumeric);
+        parserPage.Controls.Add(parserProcessLabel);
+        parserPage.Controls.Add(parserAutoRestartCheckBox);
+        parserPage.Controls.Add(parserFailureCountLabel);
+        parserPage.Controls.Add(parserFailureCountNumeric);
+        parserPage.Controls.Add(restartParserButton);
+        parserPage.Controls.Add(parserLogPathLabel);
+        parserPage.Controls.Add(parserLogPathTextBox);
+        parserPage.Controls.Add(parserLogTextBox);
+        parserPage.Location = new Point(4, 24);
+        parserPage.Name = "parserPage";
+        parserPage.Padding = new Padding(12);
+        parserPage.Size = new Size(1086, 525);
+        parserPage.TabIndex = 1;
+        parserPage.Text = "Parser 監控";
+        parserPage.UseVisualStyleBackColor = true;
+        // 
+        // parserPathLabel
+        // 
+        parserPathLabel.Location = new Point(18, 20);
+        parserPathLabel.Name = "parserPathLabel";
+        parserPathLabel.Size = new Size(120, 27);
+        parserPathLabel.Text = "Parser 資料夾";
+        parserPathLabel.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // parserPathTextBox
+        // 
+        parserPathTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        parserPathTextBox.Location = new Point(144, 22);
+        parserPathTextBox.Name = "parserPathTextBox";
+        parserPathTextBox.Size = new Size(686, 23);
+        parserPathTextBox.Text = "C:\\Users\\warre\\OneDrive\\桌面\\GIM\\介亨Parser\\mqtt-sql-bridge";
+        // 
+        // startParserMonitorButton
+        // 
+        startParserMonitorButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        startParserMonitorButton.Location = new Point(842, 18);
+        startParserMonitorButton.Name = "startParserMonitorButton";
+        startParserMonitorButton.Size = new Size(105, 30);
+        startParserMonitorButton.Text = "開始監控";
+        startParserMonitorButton.Click += StartParserMonitorButton_Click;
+        // 
+        // stopParserMonitorButton
+        // 
+        stopParserMonitorButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        stopParserMonitorButton.Enabled = false;
+        stopParserMonitorButton.Location = new Point(957, 18);
+        stopParserMonitorButton.Name = "stopParserMonitorButton";
+        stopParserMonitorButton.Size = new Size(105, 30);
+        stopParserMonitorButton.Text = "停止監控";
+        stopParserMonitorButton.Click += StopParserMonitorButton_Click;
+        // 
+        // parserStatusLabel
+        // 
+        parserStatusLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        parserStatusLabel.BorderStyle = BorderStyle.FixedSingle;
+        parserStatusLabel.Location = new Point(22, 59);
+        parserStatusLabel.Name = "parserStatusLabel";
+        parserStatusLabel.Size = new Size(1040, 34);
+        parserStatusLabel.Text = "尚未開始監控 Parser";
+        parserStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // parserIntervalLabel
+        // 
+        parserIntervalLabel.Location = new Point(22, 105);
+        parserIntervalLabel.Name = "parserIntervalLabel";
+        parserIntervalLabel.Size = new Size(120, 27);
+        parserIntervalLabel.Text = "檢查間隔（秒）";
+        parserIntervalLabel.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // parserIntervalNumeric
+        // 
+        parserIntervalNumeric.Location = new Point(148, 107);
+        parserIntervalNumeric.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
+        parserIntervalNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        parserIntervalNumeric.Name = "parserIntervalNumeric";
+        parserIntervalNumeric.Size = new Size(90, 23);
+        parserIntervalNumeric.Value = new decimal(new int[] { 5, 0, 0, 0 });
+        // 
+        // parserProcessLabel
+        // 
+        parserProcessLabel.Location = new Point(22, 139);
+        parserProcessLabel.Name = "parserProcessLabel";
+        parserProcessLabel.Size = new Size(1040, 30);
+        parserProcessLabel.Text = "程序：尚未檢查";
+        parserProcessLabel.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // parserAutoRestartCheckBox
+        // 
+        parserAutoRestartCheckBox.Checked = true;
+        parserAutoRestartCheckBox.CheckState = CheckState.Checked;
+        parserAutoRestartCheckBox.Location = new Point(264, 105);
+        parserAutoRestartCheckBox.Name = "parserAutoRestartCheckBox";
+        parserAutoRestartCheckBox.Size = new Size(100, 27);
+        parserAutoRestartCheckBox.Text = "自動重啟";
+        // 
+        // parserFailureCountLabel
+        // 
+        parserFailureCountLabel.Location = new Point(370, 105);
+        parserFailureCountLabel.Name = "parserFailureCountLabel";
+        parserFailureCountLabel.Size = new Size(95, 27);
+        parserFailureCountLabel.Text = "連續異常次數";
+        parserFailureCountLabel.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // parserFailureCountNumeric
+        // 
+        parserFailureCountNumeric.Location = new Point(471, 107);
+        parserFailureCountNumeric.Maximum = new decimal(new int[] { 100, 0, 0, 0 });
+        parserFailureCountNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        parserFailureCountNumeric.Name = "parserFailureCountNumeric";
+        parserFailureCountNumeric.Size = new Size(55, 23);
+        parserFailureCountNumeric.Value = new decimal(new int[] { 3, 0, 0, 0 });
+        // 
+        // restartParserButton
+        // 
+        restartParserButton.Location = new Point(548, 103);
+        restartParserButton.Name = "restartParserButton";
+        restartParserButton.Size = new Size(150, 30);
+        restartParserButton.Text = "立即重啟 Parser";
+        restartParserButton.Click += RestartParserButton_Click;
+        // 
+        // parserLogPathLabel
+        // 
+        parserLogPathLabel.Location = new Point(22, 174);
+        parserLogPathLabel.Name = "parserLogPathLabel";
+        parserLogPathLabel.Size = new Size(120, 27);
+        parserLogPathLabel.Text = "Parser Log";
+        parserLogPathLabel.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // parserLogPathTextBox
+        // 
+        parserLogPathTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        parserLogPathTextBox.Location = new Point(148, 176);
+        parserLogPathTextBox.Name = "parserLogPathTextBox";
+        parserLogPathTextBox.ReadOnly = true;
+        parserLogPathTextBox.Size = new Size(914, 23);
+        parserLogPathTextBox.Text = "logs\\bridge.log";
+        // 
+        // parserLogTextBox
+        // 
+        parserLogTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        parserLogTextBox.BackColor = Color.FromArgb(25, 25, 25);
+        parserLogTextBox.Font = new Font("Consolas", 10F);
+        parserLogTextBox.ForeColor = Color.Gainsboro;
+        parserLogTextBox.Location = new Point(22, 213);
+        parserLogTextBox.Multiline = true;
+        parserLogTextBox.Name = "parserLogTextBox";
+        parserLogTextBox.ReadOnly = true;
+        parserLogTextBox.ScrollBars = ScrollBars.Both;
+        parserLogTextBox.Size = new Size(1040, 289);
+        parserLogTextBox.WordWrap = false;
         // 
         // toolbar
         // 
@@ -730,6 +926,8 @@ partial class Form1
         shell.PerformLayout();
         tabs.ResumeLayout(false);
         dbPage.ResumeLayout(false);
+        parserPage.ResumeLayout(false);
+        parserPage.PerformLayout();
         toolbar.ResumeLayout(false);
         toolbar.PerformLayout();
         monitorSettings.ResumeLayout(false);
@@ -737,6 +935,8 @@ partial class Form1
         cdbGroup.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)pollSeconds).EndInit();
         ((System.ComponentModel.ISupportInitialize)timeoutSecondsNumeric).EndInit();
+        ((System.ComponentModel.ISupportInitialize)parserIntervalNumeric).EndInit();
+        ((System.ComponentModel.ISupportInitialize)parserFailureCountNumeric).EndInit();
         notificationGroup.ResumeLayout(false);
         notificationGroup.PerformLayout();
         manualPanel.ResumeLayout(false);
